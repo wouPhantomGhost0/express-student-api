@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Student = require('../models/Student');
+const requireAuth = require('../middleware/auth');
 
 // GET /students fetch all records
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
     try {
         const students = await Student.find();
         res.json(students);
@@ -14,7 +15,7 @@ router.get('/', async (req, res) => {
 
 
 // POST /students create a new record
-router.post('/', async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
     try {
         const newStudent = await Student.create(req.body);
         res.status(201).json(newStudent);
@@ -25,7 +26,7 @@ router.post('/', async (req, res) => {
 
 
 // PUT /students/:id update a record by existing record
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAuth, async (req, res) => {
     try {
         const updatedStudent = await Student.findByIdAndUpdate(
             req.params.id,
@@ -43,7 +44,7 @@ router.put('/:id', async (req, res) => {
 
 
 // DELETE /student/:id remove a record
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAuth,  async (req, res) => {
     try {
         const deletedStudent = await Student.findByIdAndDelete(req.params.id);
         if (!deletedStudent) {
